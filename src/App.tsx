@@ -15,7 +15,7 @@ import { WeekView } from './components/WeekView'
 import { WindPanel } from './components/WindPanel'
 import { useI18n } from './i18n/useI18n'
 import { derive } from './lib/derive'
-import type { Place } from './lib/types'
+import type { HourPoint, Place } from './lib/types'
 import { formatPercent, formatSpeed, formatTemp } from './lib/units'
 import { DEFAULT_PLACE, updateSettings, useSettings } from './state/settings'
 import { useForecast, useGrid } from './state/useForecastData'
@@ -26,6 +26,8 @@ import { useTheme } from './state/useTheme'
 import s from './App.module.css'
 
 type View = '48h' | '7d'
+
+const NO_HOURS: HourPoint[] = []
 
 export default function App() {
   const settings = useSettings()
@@ -73,7 +75,7 @@ export default function App() {
 
   const data = forecast.data
   const derived = useMemo(() => (data ? derive(data, now) : null), [data, now])
-  const hours = derived?.window ?? []
+  const hours = useMemo(() => derived?.window ?? NO_HOURS, [derived])
   const selectedIndex = Math.max(0, selectedTime === null ? 0 : hours.findIndex((h) => h.time === selectedTime))
   const pinnedIndex = pinnedTime === null ? null : hours.findIndex((h) => h.time === pinnedTime)
   const selectedHour = hours[selectedIndex] ?? null
@@ -115,7 +117,7 @@ export default function App() {
       />
 
       <main id="main" className={s.main} tabIndex={-1}>
-        <StatusBanners geo={geo.state} onDismissGeo={geo.dismiss} onRetryGeo={geo.locate} forecast={forecast} online={online} />
+        <StatusBanners geo={geo.state} onDismissGeo={geo.dismiss} onRetryGeo={geo.locate} forecast={forecast} online={online} now={now} />
 
         <div className={s.top} key={place.id}>
           {data && derived ? (

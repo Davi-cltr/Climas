@@ -126,14 +126,19 @@ export function useCachedResource<T>(
     [key, ttlMs],
   )
 
+  /** Invalida a requisição atual e libera a rede se ninguém mais a aguarda. */
+  const cancel = useCallback(() => {
+    requestId.current++
+    releaseRef.current?.()
+    releaseRef.current = null
+  }, [])
+
   useEffect(() => {
+    // Sincroniza com um sistema externo (rede/cache): o setState inicial reflete o cache lido agora
+    // oxlint-disable-next-line react/set-state-in-effect
     run(false)
-    return () => {
-      requestId.current++
-      releaseRef.current?.()
-      releaseRef.current = null
-    }
-  }, [run])
+    return cancel
+  }, [run, cancel])
 
   const refresh = useCallback(() => run(true), [run])
   return { ...state, refresh }

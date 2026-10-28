@@ -1,3 +1,4 @@
+import { errorMessage } from '../i18n/errors'
 import { useI18n } from '../i18n/useI18n'
 import type { HttpError } from '../lib/http'
 import { formatClock, formatDuration } from '../lib/time'
@@ -15,9 +16,10 @@ interface Props {
   onRetryGeo: () => void
   forecast: ResourceState<Forecast> & { refresh: () => void }
   online: boolean
+  now: number
 }
 
-export function StatusBanners({ geo, onDismissGeo, onRetryGeo, forecast, online }: Props) {
+export function StatusBanners({ geo, onDismissGeo, onRetryGeo, forecast, online, now }: Props) {
   const { t, lang, locale } = useI18n()
   const banners: React.ReactNode[] = []
 
@@ -47,7 +49,7 @@ export function StatusBanners({ geo, onDismissGeo, onRetryGeo, forecast, online 
   // Dados exibidos, mas desatualizados: sem rede ou falha na atualização
   if (forecast.data && forecast.storedAt && (!online || forecast.stale)) {
     const saved = formatClock(forecast.storedAt, LOCAL_TZ, locale)
-    const age = formatDuration(Date.now() - forecast.storedAt, lang)
+    const age = formatDuration(now - forecast.storedAt, lang)
     banners.push(
       <Notice
         key="stale"
@@ -68,14 +70,6 @@ export function StatusBanners({ geo, onDismissGeo, onRetryGeo, forecast, online 
 
   if (banners.length === 0) return null
   return <div className={s.banners}>{banners}</div>
-}
-
-export function errorMessage(error: HttpError, online: boolean, t: ReturnType<typeof useI18n>['t']) {
-  if (!online || error.kind === 'offline') return t.errorOffline
-  if (error.kind === 'timeout') return t.errorTimeout
-  if (error.kind === 'http') return t.errorHttp(error.message)
-  if (error.kind === 'invalid') return t.errorInvalid
-  return t.errorNetwork
 }
 
 /** Estado de erro sem dados: ocupa o lugar da leitura atual, com explicação e ação. */

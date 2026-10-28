@@ -1,21 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useI18n } from '../i18n/useI18n'
+import { formatCoords, placeDetail } from '../lib/place'
 import type { Place } from '../lib/types'
 import { updateSettings, useSettings, samePlace } from '../state/settings'
 import { usePlaceSearch } from '../state/usePlaceSearch'
 import { Icon } from './ui/Icon'
 import s from './SearchBox.module.css'
-
-export function placeDetail(p: Place) {
-  return [p.admin1 && p.admin1 !== p.name ? p.admin1 : null, p.country].filter(Boolean).join(', ')
-}
-
-export function formatCoords(lat: number, lon: number, lang: 'pt' | 'en', digits = 2) {
-  const nf = new Intl.NumberFormat(lang === 'pt' ? 'pt-BR' : 'en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
-  const ns = lat >= 0 ? 'N' : 'S'
-  const ew = lon >= 0 ? (lang === 'pt' ? 'L' : 'E') : lang === 'pt' ? 'O' : 'W'
-  return `${nf.format(Math.abs(lat))}° ${ns}  ${nf.format(Math.abs(lon))}° ${ew}`
-}
 
 interface Props {
   onSelect: (place: Place) => void
@@ -35,8 +25,6 @@ export function SearchBox({ onSelect }: Props) {
 
   const showingFavorites = query.trim().length === 0
   const items: Place[] = showingFavorites ? favorites : search.results
-
-  useEffect(() => setActive(-1), [query])
 
   useEffect(() => {
     const onDown = (e: PointerEvent) => {
@@ -105,6 +93,7 @@ export function SearchBox({ onSelect }: Props) {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
+            setActive(-1)
             setOpen(true)
           }}
           onFocus={() => setOpen(true)}

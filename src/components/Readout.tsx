@@ -8,7 +8,7 @@ import type { DayPoint, Forecast, Place } from '../lib/types'
 import { compassPoint, formatPercent, formatSpeed, formatTemp, tempUnit } from '../lib/units'
 import { conditionLabel } from '../lib/weatherCodes'
 import { isFavorite, toggleFavorite, useSettings } from '../state/settings'
-import { formatCoords, placeDetail } from './SearchBox'
+import { formatCoords, placeDetail } from '../lib/place'
 import { Button } from './ui/primitives'
 import s from './Readout.module.css'
 
