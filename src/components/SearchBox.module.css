@@ -35,6 +35,11 @@
   outline: none;
 }
 
+.field input:focus-visible {
+  /* O contorno do campo já indica o foco */
+  box-shadow: none;
+}
+
 .field input::placeholder {
   color: var(--muted);
 }

@@ -117,6 +117,8 @@ const pt = {
   errorNetwork: 'Não foi possível falar com o serviço de previsão.',
   errorHttp: (reason: string) => `O serviço de previsão recusou o pedido: ${reason}`,
   errorInvalid: 'O serviço de previsão respondeu em um formato inesperado.',
+  errorUnavailable: 'O serviço de previsão está indisponível no momento. Tente de novo em alguns minutos.',
+  timelineUnavailable: 'A linha do tempo aparece quando a previsão carregar.',
   offlineBanner: 'Sem conexão. Mostrando a última previsão salva.',
   staleBanner: (age: string) => `Mostrando dados salvos há ${age}. A atualização falhou.`,
 
@@ -255,6 +257,8 @@ const en: Strings = {
   errorNetwork: 'Could not reach the forecast service.',
   errorHttp: (reason) => `The forecast service rejected the request: ${reason}`,
   errorInvalid: 'The forecast service answered in an unexpected format.',
+  errorUnavailable: 'The forecast service is unavailable right now. Try again in a few minutes.',
+  timelineUnavailable: 'The timeline appears once the forecast loads.',
   offlineBanner: 'Offline. Showing the last saved forecast.',
   staleBanner: (age) => `Showing data saved ${age} ago. The refresh failed.`,
 

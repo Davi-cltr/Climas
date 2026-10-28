@@ -60,6 +60,16 @@
   margin-left: auto;
 }
 
+.timelineEmpty {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
 .timeline > * + * {
   margin-top: var(--space-3);
 }
@@ -186,6 +196,10 @@
 
   .timelineHead {
     padding-right: var(--gutter);
+  }
+
+  .timelineControls {
+    margin-left: 0;
   }
 
   .lower {

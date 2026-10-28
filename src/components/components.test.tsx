@@ -144,7 +144,7 @@ describe('App', () => {
       }),
     )
     render(<App />)
-    expect(await screen.findByText(/recusou o pedido: Service unavailable/)).toBeInTheDocument()
+    expect(await screen.findByText(/indisponível no momento/)).toBeInTheDocument()
     await userEvent.click(screen.getAllByRole('button', { name: 'Tentar de novo' })[0])
     expect(await screen.findByRole('heading', { level: 1, name: 'São Paulo' })).toBeInTheDocument()
   })

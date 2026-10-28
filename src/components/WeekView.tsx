@@ -34,22 +34,24 @@ export function WeekView({ days, timeZone }: { days: DayPoint[]; timeZone: strin
               {i === 0 ? t.today : formatDayShort(d.time, timeZone, locale)}
             </th>
             <td className={s.cond}>{conditionLabel(d.weatherCode, lang)}</td>
-            <td className={s.rangeCell}>
-              <span className={`${s.temp} tabular`}>{formatTemp(d.tempMin, units, locale)}</span>
-              <span className={s.track} aria-hidden="true">
-                {d.tempMin !== null && d.tempMax !== null && (
-                  <span
-                    className={s.bar}
-                    style={{
-                      left: `${pos(d.tempMin)}%`,
-                      width: `${Math.max(2, pos(d.tempMax) - pos(d.tempMin))}%`,
-                      // Cada barra pinta a fatia da rampa absoluta entre a mínima e a máxima do dia
-                      backgroundImage: `linear-gradient(90deg, ${rampAt(thermalOffset(d.tempMin))}, ${rampAt(thermalOffset(d.tempMax))})`,
-                    }}
-                  />
-                )}
-              </span>
-              <span className={`${s.temp} tabular`}>{formatTemp(d.tempMax, units, locale)}</span>
+            <td>
+              <div className={s.rangeCell}>
+                <span className={`${s.temp} tabular`}>{formatTemp(d.tempMin, units, locale)}</span>
+                <span className={s.track} aria-hidden="true">
+                  {d.tempMin !== null && d.tempMax !== null && (
+                    <span
+                      className={s.bar}
+                      style={{
+                        left: `${pos(d.tempMin)}%`,
+                        width: `${Math.max(2, pos(d.tempMax) - pos(d.tempMin))}%`,
+                        // Cada barra pinta a fatia da rampa absoluta entre a mínima e a máxima do dia
+                        backgroundImage: `linear-gradient(90deg, ${rampAt(thermalOffset(d.tempMin))}, ${rampAt(thermalOffset(d.tempMax))})`,
+                      }}
+                    />
+                  )}
+                </span>
+                <span className={`${s.temp} tabular`}>{formatTemp(d.tempMax, units, locale)}</span>
+              </div>
             </td>
             <td className={`${s.rain} tabular`}>
               {formatPercent(d.precipProbabilityMax, locale)}

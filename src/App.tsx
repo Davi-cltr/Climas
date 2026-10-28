@@ -165,7 +165,11 @@ export default function App() {
             </div>
           </div>
           {!data || !derived ? (
-            <div className="skeleton" style={{ height: 300 }} aria-hidden="true" />
+            forecast.status === 'error' ? (
+              <p className={s.timelineEmpty}>{t.timelineUnavailable}</p>
+            ) : (
+              <div className="skeleton" style={{ height: 300 }} aria-hidden="true" />
+            )
           ) : view === '48h' ? (
             <>
               <Timeline
