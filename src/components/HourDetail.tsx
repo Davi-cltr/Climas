@@ -59,7 +59,7 @@ export function HourDetail({ hour, reference, referenceIsNow, isPinned, isNow, o
       : ''
 
   return (
-    <section className={`${s.panel} ${s.selected}`} aria-labelledby="hour-title" aria-live="polite" aria-atomic="false">
+    <section className={`${s.panel} ${s.selected}`} aria-labelledby="hour-title">
       <PanelTitle id="hour-title" title={t.selectedHour} context={isNow ? `${when} (${t.now})` : when} />
       <div className={s.bigRow}>
         <span className={`${s.big} numeral swap`} key={`t${hour.time}${units}`}>

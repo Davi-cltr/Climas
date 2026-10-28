@@ -145,7 +145,10 @@ export default function AtmosMap({ latitude, longitude, grid, time, mode, reduce
     })
     m.on('move', redraw)
     m.on('resize', redraw)
-    m.on('click', (e) => callbacks.current.onPick(e.lngLat.lat, e.lngLat.lng))
+    m.on('click', (e) => {
+      const ll = e.lngLat.wrap()
+      callbacks.current.onPick(ll.lat, ll.lng)
+    })
     return () => {
       m.remove()
       map.current = null

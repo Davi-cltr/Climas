@@ -33,6 +33,7 @@ export function RainPanel({ hours, selectedTime, onSelectTime, timeZone }: Props
   const anyAmount = data.some((d) => (d.precipitation ?? 0) > 0)
   const anyProb = data.some((d) => (d.precipProbability ?? 0) > 0)
   const total = data.reduce((sum, d) => sum + (d.precipitation ?? 0), 0)
+  const noData = data.every((d) => d.precipProbability === null && d.precipitation === null)
 
   return (
     <section className={s.panel} aria-labelledby="rain-title">
@@ -77,12 +78,12 @@ export function RainPanel({ hours, selectedTime, onSelectTime, timeZone }: Props
         </svg>
       </div>
       <p className={s.small}>
-        {!anyProb && !anyAmount ? t.rainNone : t.rainLegend}
+        {noData ? t.rainUnavailable : !anyProb && !anyAmount ? t.rainNone : t.rainLegend}
         {anyAmount && (
           <>
             {' '}
             <span className="tabular">
-              {t.rainAmount}: {formatPrecip(total, units, locale)}, {t.max} {formatPrecip(Math.max(...data.map((d) => d.precipitation ?? 0)), units, locale)}/h.
+              {t.rainTotal(formatPrecip(total, units, locale), formatPrecip(Math.max(...data.map((d) => d.precipitation ?? 0)), units, locale))}
             </span>
           </>
         )}

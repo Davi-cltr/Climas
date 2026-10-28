@@ -110,8 +110,12 @@ describe('grade do mapa', () => {
   })
 
   it('ajusta longitudes perto da linha de data', () => {
-    const { longitudes } = gridCoordinates(0, 179.9)
-    expect(longitudes.every((l) => l >= -180 && l <= 180)).toBe(true)
+    const { latitudes, longitudes } = gridCoordinates(0, 179.9)
+    // Geometria contínua (crescente) para o mapa
+    expect(longitudes.every((l, i) => i === 0 || l > longitudes[i - 1])).toBe(true)
+    // URL sempre dentro de [-180, 180]
+    const sent = new URL(buildGridUrl(latitudes, longitudes)).searchParams.get('longitude')!.split(',').map(Number)
+    expect(sent.every((l) => l >= -180 && l <= 180)).toBe(true)
   })
 
   it('pede todos os pontos numa única URL', () => {

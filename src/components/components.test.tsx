@@ -54,6 +54,18 @@ describe('SearchBox', () => {
     expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ name: 'São Paulo', admin1: 'Pará' }))
   })
 
+  it('não escolhe um resultado da consulta anterior enquanto a nova busca está pendente', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => json(GEOCODING_SAO_PAULO)))
+    const onSelect = vi.fn()
+    const user = userEvent.setup()
+    render(<SearchBox onSelect={onSelect} />)
+    const input = screen.getByRole('combobox')
+    await user.type(input, 'São')
+    await screen.findByText('Pará, Brasil')
+    await user.type(input, ' Tomé{Enter}')
+    expect(onSelect).not.toHaveBeenCalled()
+  })
+
   it('informa quando não há resultados', async () => {
     vi.stubGlobal('fetch', vi.fn(() => json({ generationtime_ms: 0.1 })))
     render(<SearchBox onSelect={() => {}} />)
@@ -70,6 +82,15 @@ describe('SearchBox', () => {
 })
 
 describe('Timeline', () => {
+  it('gira as setas de vento pela direção de origem (a forma base aponta para o sul)', () => {
+    const h = normalizeForecast(makeForecastResponse()).hourly.slice(0, 4).map((x) => ({ ...x, windDirection: 0 }))
+    const { container } = render(<Timeline hours={h} selected={0} pinned={null} onSelect={() => {}} timeZone="UTC" animationKey="a" />)
+    const arrows = [...container.querySelectorAll('g[transform*="rotate"]')].map((g) => g.getAttribute('transform'))
+    // Vento de norte (0°) sopra para o sul: sem rotação adicional
+    expect(arrows.length).toBeGreaterThan(0)
+    expect(arrows.every((t) => t?.endsWith('rotate(0)'))).toBe(true)
+  })
+
   const hours = normalizeForecast(makeForecastResponse()).hourly.slice(0, 48)
 
   it('é um slider operável por teclado com texto descritivo', () => {

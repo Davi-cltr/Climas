@@ -1,10 +1,10 @@
 import { scaleLinear } from 'd3-scale'
 import { area, curveMonotoneX, line } from 'd3-shape'
-import { useId, useMemo, useRef } from 'react'
+import { useEffect, useId, useMemo, useRef } from 'react'
 import { useI18n } from '../i18n/useI18n'
 import { THERMAL_STOPS } from '../lib/color'
 import { extent } from '../lib/derive'
-import { formatDayShort, formatHourShort, localParts } from '../lib/time'
+import { formatDayShort, formatHourShort, localDayKey } from '../lib/time'
 import type { HourPoint } from '../lib/types'
 import { compassPoint, convertSpeed, formatNumber, formatPercent, formatPrecip, formatSpeed, formatTemp } from '../lib/units'
 import { conditionLabel } from '../lib/weatherCodes'
@@ -36,7 +36,7 @@ const HEIGHT = WIND_Y + 32
 
 export function Timeline({ hours, selected, pinned, onSelect, timeZone, animationKey }: Props) {
   const { t, lang, locale, units } = useI18n()
-  const [wrapRef, { width: containerWidth }] = useSize<HTMLDivElement>()
+  const [wrapRef, { width: containerWidth }, wrapEl] = useSize<HTMLDivElement>()
   const gradId = useId()
   const pointer = useRef<{ id: number; x: number; y: number; type: string; dragging: boolean } | null>(null)
 
@@ -91,7 +91,11 @@ export function Timeline({ hours, selected, pinned, onSelect, timeZone, animatio
   }, [hours])
 
   const midnights = useMemo(
-    () => hours.map((h, i) => ({ i, h })).filter(({ h, i }) => i > 0 && localParts(h.time, timeZone).hour === 0),
+    () =>
+      hours
+        .map((h, i) => ({ i, h }))
+        // Compara o dia local com a hora anterior: funciona mesmo onde o horário de verão começa à meia-noite
+        .filter(({ h, i }) => i > 0 && localDayKey(h.time, timeZone) !== localDayKey(hours[i - 1].time, timeZone)),
     [hours, timeZone],
   )
 
@@ -130,6 +134,18 @@ export function Timeline({ hours, selected, pinned, onSelect, timeZone, animatio
     }
   }
 
+  // Ao navegar pelo teclado, rola a linha do tempo para manter a hora escolhida à vista
+  const keyboardNav = useRef(false)
+  useEffect(() => {
+    const el = wrapEl
+    if (!keyboardNav.current || !el || el.scrollWidth <= el.clientWidth) return
+    keyboardNav.current = false
+    const px = x(selected)
+    const margin = 80
+    if (px < el.scrollLeft + margin) el.scrollTo({ left: Math.max(0, px - margin) })
+    else if (px > el.scrollLeft + el.clientWidth - margin) el.scrollTo({ left: px - el.clientWidth + margin })
+  }, [selected, x, wrapEl])
+
   const onKeyDown = (e: React.KeyboardEvent) => {
     const map: Record<string, number> = {
       ArrowRight: selected + 1,
@@ -143,6 +159,7 @@ export function Timeline({ hours, selected, pinned, onSelect, timeZone, animatio
     }
     if (!(e.key in map)) return
     e.preventDefault()
+    keyboardNav.current = true
     onSelect(Math.max(0, Math.min(n - 1, map[e.key])))
   }
 
@@ -275,7 +292,7 @@ export function Timeline({ hours, selected, pinned, onSelect, timeZone, animatio
             )
           })}
 
-          {/* Vento: seta aponta para onde o vento vai */}
+          {/* Vento: a forma aponta para baixo (sul); girar pela direção de origem faz a seta apontar para onde o vento vai */}
           <text x={PAD_L - 10} y={WIND_Y + 4} textAnchor="end" className={s.rowLabel}>
             {t.windRow}
           </text>
@@ -283,7 +300,7 @@ export function Timeline({ hours, selected, pinned, onSelect, timeZone, animatio
             i % windEvery === 0 ? (
               <g key={`w${i}`}>
                 {h.windDirection !== null && (
-                  <g transform={`translate(${x(i)},${WIND_Y}) rotate(${h.windDirection + 180})`}>
+                  <g transform={`translate(${x(i)},${WIND_Y}) rotate(${h.windDirection})`}>
                     <path d="M0,-7 L0,7 M-3.5,2.5 L0,7 L3.5,2.5" className={s.arrow} />
                   </g>
                 )}

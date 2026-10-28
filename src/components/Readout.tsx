@@ -24,7 +24,8 @@ export function Readout({ place, forecast, nowIndex, today, now }: Props) {
   const { t, lang, locale, units } = useI18n()
   const settings = useSettings()
   const tz = forecast.timezone
-  const cur = forecast.current
+  // A estimativa de "agora" só vale enquanto for recente; depois disso, usa a hora vigente da previsão
+  const cur = forecast.current && Math.abs(now - forecast.current.time) < 60 * 60_000 ? forecast.current : null
   const hourNow = forecast.hourly[nowIndex]
 
   // "Agora" é a estimativa de condições atuais do modelo; se faltar, usa a hora vigente da previsão

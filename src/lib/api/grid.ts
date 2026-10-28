@@ -16,11 +16,13 @@ export function gridCoordinates(lat: number, lon: number, rows = GRID_ROWS, cols
   // Corrige a longitude pela latitude para a grade ficar aproximadamente quadrada no mapa
   const lonStep = step / Math.max(0.2, Math.cos((lat * Math.PI) / 180))
   const clampLat = (v: number) => Math.max(-89.9, Math.min(89.9, v))
-  const wrapLon = (v: number) => ((((v + 180) % 360) + 360) % 360) - 180
   const latitudes = Array.from({ length: rows }, (_, r) => clampLat(lat + (halfR - r) * step))
-  const longitudes = Array.from({ length: cols }, (_, c) => wrapLon(lon + (c - halfC) * lonStep))
+  // Longitudes contínuas (podem passar de ±180) para a geometria; só a URL é normalizada
+  const longitudes = Array.from({ length: cols }, (_, c) => lon + (c - halfC) * lonStep)
   return { latitudes, longitudes }
 }
+
+export const wrapLon = (v: number) => ((((v + 180) % 360) + 360) % 360) - 180
 
 export function buildGridUrl(latitudes: number[], longitudes: number[]): string {
   const lats: string[] = []
@@ -28,7 +30,7 @@ export function buildGridUrl(latitudes: number[], longitudes: number[]): string 
   for (const la of latitudes) {
     for (const lo of longitudes) {
       lats.push(la.toFixed(3))
-      lons.push(lo.toFixed(3))
+      lons.push(wrapLon(lo).toFixed(3))
     }
   }
   const params = new URLSearchParams({

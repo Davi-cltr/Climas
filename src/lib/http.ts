@@ -44,24 +44,28 @@ export async function fetchJson(url: string, options: FetchJsonOptions = {}): Pr
   const onAbort = () => controller.abort()
   signal?.addEventListener('abort', onAbort, { once: true })
 
+  // O timeout e o cancelamento valem até o corpo inteiro ser lido, não só até os cabeçalhos
   let response: Response
+  let body: unknown
   try {
-    response = await fetchImpl(url, { signal: controller.signal, headers: { Accept: 'application/json' } })
-  } catch (error) {
-    if (timedOut) throw new HttpError('timeout', 'O serviço demorou demais para responder')
-    if (signal?.aborted) throw new HttpError('aborted', 'Requisição cancelada')
-    if (isOffline()) throw new HttpError('offline', 'Sem conexão com a internet')
-    throw new HttpError('network', error instanceof Error ? error.message : 'Falha de rede')
+    try {
+      response = await fetchImpl(url, { signal: controller.signal, headers: { Accept: 'application/json' } })
+    } catch (error) {
+      if (timedOut) throw new HttpError('timeout', 'O serviço demorou demais para responder')
+      if (signal?.aborted) throw new HttpError('aborted', 'Requisição cancelada')
+      if (isOffline()) throw new HttpError('offline', 'Sem conexão com a internet')
+      throw new HttpError('network', error instanceof Error ? error.message : 'Falha de rede')
+    }
+    try {
+      body = await response.json()
+    } catch {
+      if (timedOut) throw new HttpError('timeout', 'O serviço demorou demais para responder')
+      if (signal?.aborted) throw new HttpError('aborted', 'Requisição cancelada')
+      throw new HttpError(response.ok ? 'invalid' : 'http', 'Resposta não é JSON válido', response.status)
+    }
   } finally {
     clearTimeout(timer)
     signal?.removeEventListener('abort', onAbort)
-  }
-
-  let body: unknown
-  try {
-    body = await response.json()
-  } catch {
-    throw new HttpError(response.ok ? 'invalid' : 'http', 'Resposta não é JSON válido', response.status)
   }
 
   if (!response.ok) {

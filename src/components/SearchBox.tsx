@@ -12,6 +12,8 @@ interface Props {
 }
 
 /** Combobox de busca (padrão WAI-ARIA 1.2): setas navegam, Enter escolhe, Esc fecha. */
+const removeFavorite = (p: Place) => updateSettings((st) => ({ favorites: st.favorites.filter((f) => !samePlace(f, p)) }))
+
 export function SearchBox({ onSelect }: Props) {
   const { t, lang } = useI18n()
   const { favorites } = useSettings()
@@ -50,11 +52,17 @@ export function SearchBox({ onSelect }: Props) {
       e.preventDefault()
       setActive((i) => Math.max(-1, i - 1))
     } else if (e.key === 'Enter') {
-      const target = items[active >= 0 ? active : 0]
+      // Durante uma busca pendente, a lista ainda mostra a consulta anterior: não escolher dela
+      const current = showingFavorites || search.status === 'done'
+      const target = current ? items[active >= 0 ? active : 0] : undefined
       if (target && open) {
         e.preventDefault()
         choose(target)
       }
+    } else if (e.key === 'Delete' && showingFavorites && active >= 0 && items[active]) {
+      e.preventDefault()
+      removeFavorite(items[active])
+      setActive((i) => Math.min(i, items.length - 2))
     } else if (e.key === 'Escape') {
       if (open) setOpen(false)
       else setQuery('')
@@ -103,8 +111,13 @@ export function SearchBox({ onSelect }: Props) {
       </div>
 
       <div className={s.popover} hidden={!expanded}>
-        {showingFavorites && items.length > 0 && <p className={s.groupLabel}>{t.favorites}</p>}
-        <ul id={listId} role="listbox" aria-label={showingFavorites ? t.favorites : t.searchLabel} className={s.list}>
+        {showingFavorites && items.length > 0 && (
+          <p className={s.groupLabel} id={`${listId}-hint`}>
+            {t.favorites}
+            <span className="visually-hidden">. {t.favoritesKeyboardHint}</span>
+          </p>
+        )}
+        <ul id={listId} role="listbox" aria-label={showingFavorites ? t.favorites : t.searchLabel} aria-describedby={showingFavorites ? `${listId}-hint` : undefined} className={s.list}>
           {items.map((p, i) => (
             <li
               key={p.id}
@@ -120,18 +133,18 @@ export function SearchBox({ onSelect }: Props) {
               <span className={s.detail}>{placeDetail(p) || formatCoords(p.latitude, p.longitude, lang)}</span>
               <span className={`${s.coords} tabular`}>{formatCoords(p.latitude, p.longitude, lang, 1)}</span>
               {showingFavorites && (
-                <button
-                  type="button"
+                // Atalho visual para o mouse; no teclado, a tecla Delete remove o favorito destacado
+                <span
                   className={s.remove}
-                  aria-label={t.removeFavoriteNamed(p.name)}
-                  tabIndex={-1}
+                  aria-hidden="true"
+                  title={t.removeFavoriteNamed(p.name)}
                   onClick={(e) => {
                     e.stopPropagation()
-                    updateSettings((st) => ({ favorites: st.favorites.filter((f) => !samePlace(f, p)) }))
+                    removeFavorite(p)
                   }}
                 >
                   <Icon name="close" size={14} />
-                </button>
+                </span>
               )}
             </li>
           ))}

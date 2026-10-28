@@ -80,6 +80,7 @@ export function WindPanel({ hour, next24, isNow, timeZone }: Props) {
       <p className={s.small}>
         {t.windNext24}: {t.max} {formatSpeed(maxSpeed, units, locale)}
       </p>
+      <p className={s.footnote}>{t.windTraceNote}</p>
     </section>
   )
 }

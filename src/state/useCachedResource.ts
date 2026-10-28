@@ -140,6 +140,23 @@ export function useCachedResource<T>(
     return cancel
   }, [run, cancel])
 
+  // Revalida quando o cache vence com a página aberta, quando a aba volta a ficar visível e quando a rede volta
+  useEffect(() => {
+    if (!key) return
+    const revalidate = () => {
+      if (document.hidden) return
+      if (!isFresh(readCache(key), ttlMs)) run(false)
+    }
+    const timer = setInterval(revalidate, 60_000)
+    document.addEventListener('visibilitychange', revalidate)
+    window.addEventListener('online', revalidate)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', revalidate)
+      window.removeEventListener('online', revalidate)
+    }
+  }, [key, ttlMs, run])
+
   const refresh = useCallback(() => run(true), [run])
   return { ...state, refresh }
 }
