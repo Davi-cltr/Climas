@@ -1,0 +1,150 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface-0) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wordmark {
+  font-stretch: var(--stretch-wordmark);
+  font-weight: 760;
+  font-size: 1.1875rem;
+  letter-spacing: 0.04em;
+}
+
+.locateText {
+  display: inline;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.updated {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-right: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--wind);
+}
+
+.dot[data-refreshing] {
+  background: var(--signal);
+  animation: pulse 1s var(--ease-in-out) infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.settings {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: var(--z-popover);
+  display: grid;
+  gap: var(--space-2);
+  width: max-content;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-float);
+  animation: menu-in var(--dur-base) var(--ease-out);
+  transform-origin: top right;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+.menuLabel {
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.menuLabel:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .updated {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .header {
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-2);
+    padding: var(--space-2) var(--gutter) var(--space-3);
+  }
+
+  .header > :nth-child(2) {
+    order: 5;
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  /* Escondido visualmente, mas mantém o nome acessível do botão */
+  .locateText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .locate {
+    width: var(--tap);
+    padding: 0;
+    margin-left: auto;
+  }
+
+  .end {
+    margin-left: 0;
+  }
+}

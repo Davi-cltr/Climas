@@ -1,0 +1,184 @@
+.root {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  max-width: 480px;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--tap);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--muted);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.field:focus-within {
+  border-color: var(--signal);
+}
+
+.field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-md);
+  outline: none;
+}
+
+.field input::placeholder {
+  color: var(--muted);
+}
+
+.field input::-webkit-search-cancel-button {
+  filter: grayscale(1);
+}
+
+/* Linha de progresso sob o campo enquanto busca */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--signal), transparent);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+
+.field[data-busy] .progress {
+  opacity: 1;
+  animation: sweep 1.1s var(--ease-in-out) infinite;
+}
+
+@keyframes sweep {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: var(--z-popover);
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-float);
+  animation: drop var(--dur-base) var(--ease-out);
+  transform-origin: top center;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.99);
+  }
+}
+
+.popover[hidden] {
+  display: none;
+}
+
+.groupLabel {
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.list {
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+}
+
+.option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'name coords'
+    'detail coords';
+  column-gap: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  min-height: var(--tap);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--signal);
+}
+
+.name {
+  grid-area: name;
+  font-weight: 560;
+  color: var(--ink);
+}
+
+.detail {
+  grid-area: detail;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.coords {
+  grid-area: coords;
+  align-self: center;
+  color: var(--faint);
+  font-size: var(--text-xs);
+  white-space: pre;
+}
+
+.remove {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--muted);
+  opacity: 0;
+}
+
+.option:hover .remove,
+.option[aria-selected='true'] .remove {
+  opacity: 1;
+}
+
+.remove:hover {
+  color: var(--ink);
+}
+
+@media (hover: none) {
+  .remove {
+    opacity: 1;
+  }
+}
+
+.status {
+  padding: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
