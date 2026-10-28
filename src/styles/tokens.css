@@ -1,0 +1,163 @@
+/*
+ * CLIMAS — tokens do sistema visual.
+ * Conceito: instrumento de sondagem. Superfícies preto-azuladas, uma rampa térmica como única fonte de cor quente,
+ * ciano reservado à seleção e à localização do usuário.
+ */
+
+:root {
+  /* Tipografia */
+  --font-sans: 'Archivo Variable', 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  /* Escala tipográfica clássica (Bringhurst): 12 14 16 18 21 24 36 48 60 72 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4.5rem;
+  --text-readout: clamp(7rem, 5rem + 7vw, 11rem);
+
+  /* Larguras do eixo wdth da Archivo */
+  --stretch-narrow: 62%;
+  --stretch-normal: 100%;
+  --stretch-wide: 118%;
+  --stretch-wordmark: 125%;
+
+  /* Espaçamento (base 4) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --gutter: clamp(16px, 2.2vw, 32px);
+
+  /* Raios: pequenos para controles, médios para camadas flutuantes */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+
+  /* Camadas */
+  --z-map-overlay: 2;
+  --z-sticky: 10;
+  --z-popover: 30;
+  --z-toast: 40;
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 220ms;
+  --dur-slow: 480ms;
+
+  /* Interação */
+  --tap: 44px;
+  --focus-ring: 0 0 0 2px var(--surface-0), 0 0 0 4px var(--signal);
+
+  /* Pontos de quebra (referência para JS; CSS usa os valores literais) */
+  --bp-phone: 640px;
+  --bp-tablet: 960px;
+  --bp-laptop: 1280px;
+
+  color-scheme: dark;
+  --surface-0: #08131f;
+  --surface-1: #0e1e31;
+  --surface-2: #142a43;
+  --surface-night: #0b1a2a;
+  --surface-glass: rgb(8 19 31 / 0.76);
+  --line: #21405f;
+  --line-soft: #183049;
+  --ink: #e6eff7;
+  --ink-2: #b9cadb;
+  --muted: #8ba3ba;
+  --faint: #6a8399;
+  --signal: #7fe6f2;
+  --signal-soft: rgb(127 230 242 / 0.08);
+  --atmos: #3d7bc9;
+  --rain: #7d9bff;
+  --rain-soft: rgb(125 155 255 / 0.3);
+  --wind: #8fd6c2;
+  --alert: #f2b84b;
+  --danger: #ff8a7a;
+  --t-cold: #4f86d6;
+  --t-mild: #a9c6cf;
+  --t-warm: #e9b266;
+  --t-hot: #e46d52;
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 0.36), 0 1px 0 rgb(255 255 255 / 0.04) inset;
+  --map-field-alpha: 0.2;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --surface-0: #eef3f7;
+  --surface-1: #f8fbfd;
+  --surface-2: #e2eaf1;
+  --surface-night: #e3eaf1;
+  --surface-glass: rgb(248 251 253 / 0.86);
+  --line: #c4d3e0;
+  --line-soft: #d6e1ea;
+  --ink: #0d1b2a;
+  --ink-2: #26394d;
+  --muted: #4a6075;
+  --faint: #5b7086;
+  --signal: #08788a;
+  --signal-soft: rgb(8 120 138 / 0.08);
+  --atmos: #2f6db8;
+  --rain: #3d5bd6;
+  --rain-soft: rgb(61 91 214 / 0.26);
+  --wind: #17806a;
+  --alert: #a86a00;
+  --danger: #b4321f;
+  --t-cold: #2f6db8;
+  --t-mild: #6f98a6;
+  --t-warm: #c78421;
+  --t-hot: #c4452b;
+  --shadow-float: 0 12px 28px rgb(13 27 42 / 0.14);
+  --map-field-alpha: 0.38;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme='system'] {
+    color-scheme: light;
+    --surface-0: #eef3f7;
+    --surface-1: #f8fbfd;
+    --surface-2: #e2eaf1;
+    --surface-night: #e3eaf1;
+    --surface-glass: rgb(248 251 253 / 0.86);
+    --line: #c4d3e0;
+    --line-soft: #d6e1ea;
+    --ink: #0d1b2a;
+    --ink-2: #26394d;
+    --muted: #4a6075;
+    --faint: #5b7086;
+    --signal: #08788a;
+    --signal-soft: rgb(8 120 138 / 0.08);
+    --atmos: #2f6db8;
+    --rain: #3d5bd6;
+    --rain-soft: rgb(61 91 214 / 0.26);
+    --wind: #17806a;
+    --alert: #a86a00;
+    --danger: #b4321f;
+    --t-cold: #2f6db8;
+    --t-mild: #6f98a6;
+    --t-warm: #c78421;
+    --t-hot: #c4452b;
+    --shadow-float: 0 12px 28px rgb(13 27 42 / 0.14);
+    --map-field-alpha: 0.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}

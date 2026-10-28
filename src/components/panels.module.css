@@ -1,0 +1,218 @@
+/* Painéis inferiores: colunas abertas separadas por linhas, sem cartões */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-6) var(--gutter) var(--space-8);
+}
+
+.selected {
+  background: linear-gradient(180deg, var(--signal-soft), transparent 70%);
+}
+
+.bigRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.big {
+  font-size: var(--text-5xl);
+  line-height: 0.85;
+}
+
+.bigSide {
+  display: grid;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  padding-bottom: 4px;
+}
+
+.bigSide > :first-child {
+  color: var(--ink);
+  font-weight: 520;
+  font-size: var(--text-md);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.list dt {
+  color: var(--muted);
+}
+
+.list dd {
+  text-align: right;
+  font-weight: 540;
+}
+
+.compare {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  min-height: 92px;
+}
+
+.compare b {
+  color: var(--ink);
+  font-weight: 560;
+}
+
+.chart {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart svg text,
+.panel svg text {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.gridLine {
+  stroke: var(--line-soft);
+  stroke-dasharray: 2 4;
+}
+
+.axisText {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.barGroup {
+  cursor: pointer;
+}
+
+.probBar {
+  fill: var(--rain-soft);
+}
+
+.amountBar {
+  fill: var(--rain);
+}
+
+.selBox {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.2;
+}
+
+.small {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  max-width: 48ch;
+}
+
+.footnote {
+  color: var(--faint);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.value {
+  font-size: var(--text-lg);
+  font-weight: 560;
+}
+
+/* Vento */
+.windBody {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--line);
+}
+
+.tickMajor {
+  stroke: var(--muted);
+}
+
+.tickMinor {
+  stroke: var(--line);
+}
+
+.trace {
+  fill: var(--wind);
+}
+
+.needle {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.needleLine {
+  fill: none;
+  stroke: var(--wind);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.needleTail {
+  fill: var(--wind);
+}
+
+.windText p {
+  margin: 0;
+}
+
+.mid {
+  font-size: var(--text-4xl);
+  line-height: 1;
+}
+
+.unit {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+/* Sol */
+.horizon {
+  stroke: var(--muted);
+}
+
+.arcTrack {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+
+.arcDone {
+  fill: none;
+  stroke: var(--t-warm);
+  stroke-width: 2;
+}
+
+.sun {
+  fill: var(--t-warm);
+}
+
+.sunDown {
+  fill: var(--surface-0);
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}

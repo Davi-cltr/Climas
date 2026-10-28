@@ -1,0 +1,194 @@
+.readout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--gutter) var(--space-6);
+  min-width: 0;
+}
+
+.place {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.title {
+  font-stretch: var(--stretch-wide);
+  font-weight: 640;
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.fav {
+  flex: none;
+}
+
+.fav[aria-pressed='true'] {
+  color: var(--alert);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+}
+
+.now {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.temp {
+  display: flex;
+  align-items: flex-start;
+  line-height: 0.8;
+}
+
+.tempValue {
+  font-size: var(--text-readout);
+  font-weight: 250;
+  letter-spacing: -0.045em;
+  animation: rise var(--dur-slow) var(--ease-out);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.tempUnit {
+  margin: 0.4rem 0 0 0.35rem;
+  font-stretch: var(--stretch-narrow);
+  font-weight: 300;
+  font-size: var(--text-4xl);
+  color: var(--muted);
+}
+
+.condition {
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.conditionLabel {
+  font-size: var(--text-xl);
+  font-weight: 520;
+  line-height: 1.2;
+}
+
+.feels {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.feels b {
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 560;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+/* A barra mostra o trecho da rampa térmica absoluta correspondente ao dia (tamanho e posição vêm do JS) */
+.rangeBar {
+  position: relative;
+  flex: 1;
+  max-width: 220px;
+  height: 4px;
+  border-radius: 2px;
+  background-image: linear-gradient(90deg, var(--t-cold) 0%, var(--t-mild) 48.7%, var(--t-warm) 74.4%, var(--t-hot) 100%);
+  background-repeat: no-repeat;
+}
+
+.rangeBar i {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--surface-0);
+  transition: left var(--dur-slow) var(--ease-out);
+}
+
+.rangeLabel {
+  margin-left: var(--space-1);
+}
+
+.summary {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.lede {
+  max-width: 36ch;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 380;
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.4375rem);
+  line-height: 1.4;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.note {
+  max-width: 52ch;
+  color: var(--faint);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.facts dd {
+  margin-top: var(--space-1);
+  font-weight: 560;
+  font-size: var(--text-lg);
+}
+
+@media (max-width: 760px) {
+  .readout {
+    padding-top: var(--space-6);
+    gap: var(--space-5);
+  }
+
+  .tempValue {
+    font-size: 7.5rem;
+  }
+
+  .now {
+    gap: var(--space-4);
+  }
+}

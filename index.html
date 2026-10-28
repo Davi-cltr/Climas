@@ -1,13 +1,27 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="system">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>CLIMAS</title>
+    <meta name="description" content="Previsão por hora, mapa com grade real de dados e leitura da atmosfera, com dados da Open-Meteo." />
+    <meta name="theme-color" content="#08131f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <script>
+      // Aplica o tema salvo antes da pintura, evitando um flash de tema errado
+      try {
+        var s = JSON.parse(localStorage.getItem('climas:settings:v1') || '{}')
+        var pref = s.theme === 'light' || s.theme === 'dark' ? s.theme : 'system'
+        document.documentElement.dataset.theme = pref
+        var light = pref === 'light' || (pref === 'system' && matchMedia('(prefers-color-scheme: light)').matches)
+        document.documentElement.dataset.resolvedTheme = light ? 'light' : 'dark'
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>O CLIMAS precisa de JavaScript para consultar a previsão.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,0 +1,87 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table tr {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.table tr:last-child {
+  border-bottom: 0;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-2);
+  text-align: left;
+  font-weight: inherit;
+  vertical-align: middle;
+}
+
+.day {
+  width: 92px;
+  color: var(--ink);
+  font-weight: 560 !important;
+  text-transform: capitalize;
+}
+
+.cond {
+  width: 30%;
+  color: var(--ink-2);
+}
+
+.rangeCell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.temp {
+  width: 3.2ch;
+  color: var(--muted);
+  text-align: right;
+}
+
+.temp:last-child {
+  color: var(--ink);
+  text-align: left;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 3px;
+}
+
+.rain {
+  width: 90px;
+  color: var(--rain);
+  text-align: right !important;
+}
+
+.rain small {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+@media (max-width: 640px) {
+  .cond {
+    display: none;
+  }
+
+  .day {
+    width: 64px;
+  }
+}
