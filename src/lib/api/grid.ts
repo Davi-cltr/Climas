@@ -3,20 +3,22 @@ import type { ForecastGrid, GridPoint } from '../types'
 import { isObject, num, series } from '../validate'
 import { FORECAST_ENDPOINT } from './forecast'
 
-/** Grade quadrada de pontos ao redor do centro. 7×7 = 49 pontos numa única requisição. */
-export const GRID_SIZE = 7
+/** Grade de pontos ao redor do centro: 7 linhas × 9 colunas = 63 pontos numa única requisição. */
+export const GRID_ROWS = 7
+export const GRID_COLS = 9
 /** Espaçamento em graus de latitude (~22 km). */
 export const GRID_STEP_DEG = 0.2
 export const GRID_HOURS = 48
 
-export function gridCoordinates(lat: number, lon: number, size = GRID_SIZE, step = GRID_STEP_DEG) {
-  const half = (size - 1) / 2
+export function gridCoordinates(lat: number, lon: number, rows = GRID_ROWS, cols = GRID_COLS, step = GRID_STEP_DEG) {
+  const halfR = (rows - 1) / 2
+  const halfC = (cols - 1) / 2
   // Corrige a longitude pela latitude para a grade ficar aproximadamente quadrada no mapa
   const lonStep = step / Math.max(0.2, Math.cos((lat * Math.PI) / 180))
   const clampLat = (v: number) => Math.max(-89.9, Math.min(89.9, v))
   const wrapLon = (v: number) => ((((v + 180) % 360) + 360) % 360) - 180
-  const latitudes = Array.from({ length: size }, (_, r) => clampLat(lat + (half - r) * step))
-  const longitudes = Array.from({ length: size }, (_, c) => wrapLon(lon + (c - half) * lonStep))
+  const latitudes = Array.from({ length: rows }, (_, r) => clampLat(lat + (halfR - r) * step))
+  const longitudes = Array.from({ length: cols }, (_, c) => wrapLon(lon + (c - halfC) * lonStep))
   return { latitudes, longitudes }
 }
 

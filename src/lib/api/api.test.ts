@@ -100,12 +100,12 @@ describe('geocodificação', () => {
 })
 
 describe('grade do mapa', () => {
-  it('gera 7×7 coordenadas centradas, de norte para sul', () => {
+  it('gera 7×9 coordenadas centradas, de norte para sul', () => {
     const { latitudes, longitudes } = gridCoordinates(-23.5, -46.6)
     expect(latitudes).toHaveLength(7)
-    expect(longitudes).toHaveLength(7)
+    expect(longitudes).toHaveLength(9)
     expect(latitudes[3]).toBeCloseTo(-23.5)
-    expect(longitudes[3]).toBeCloseTo(-46.6)
+    expect(longitudes[4]).toBeCloseTo(-46.6)
     expect(latitudes[0]).toBeGreaterThan(latitudes[6])
   })
 
@@ -117,14 +117,14 @@ describe('grade do mapa', () => {
   it('pede todos os pontos numa única URL', () => {
     const { latitudes, longitudes } = gridCoordinates(10, 10)
     const url = new URL(buildGridUrl(latitudes, longitudes))
-    expect(url.searchParams.get('latitude')!.split(',')).toHaveLength(49)
+    expect(url.searchParams.get('latitude')!.split(',')).toHaveLength(63)
     expect(url.searchParams.get('forecast_hours')).toBe('48')
   })
 
   it('normaliza a resposta em array', () => {
     const { latitudes, longitudes } = gridCoordinates(-23.5, -46.6)
     const g = normalizeGrid(makeGridResponse(latitudes, longitudes), latitudes, longitudes)
-    expect(g.points).toHaveLength(49)
+    expect(g.points).toHaveLength(63)
     expect(g.times).toHaveLength(48)
     expect(g.points[0].temperature).toHaveLength(48)
   })
